@@ -1,0 +1,149 @@
+/* Custom CSS overrides or additions can go here */
+/* For now, try to rely primarily on Bootstrap and inline styles in index.html */
+#workflow-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+#workflow-canvas {
+    position: relative;
+    min-height: 1000px; /* Give enough space for nodes */
+    min-width: 1000px;
+}
+.workflow-connection {
+    stroke: #999;
+    stroke-width: 2;
+    fill: none;
+}
+.workflow-node {
+    position: absolute;
+    background-color: #3a3f47;
+    border: 2px solid #6c757d; /* Default border */
+    color: #adb5bd;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 150px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+    font-size: 0.9rem;
+}
+.workflow-node.selected {
+    border-color: #0d6efd; /* Blue for selected */
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+}
+.workflow-node.running {
+    border-color: #ffc107; /* Yellow for running */
+}
+.workflow-node.success {
+    border-color: #198754; /* Green for success */
+}
+.workflow-node.error {
+    border-color: #dc3545; /* Red for error */
+}
+#sidebar {
+    width: 350px;
+    min-width: 300px; /* Prevent excessive shrinking */
+    padding: 15px;
+    background-color: #212529;
+    color: #adb5bd;
+    overflow-y: auto; /* Allow scrolling in sidebar */
+    display: flex;
+    flex-direction: column;
+}
+#node-details {
+    flex-grow: 1;
+    margin-top: 15px;
+    background-color: #343a40;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-y: auto; /* Scroll if content overflows */
+    font-family: monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap; /* Wrap long lines */
+    word-break: break-all; /* Break long words/strings */
+}
+#error-area {
+    margin-top: 15px;
+    color: #dc3545;
+    font-size: 0.9rem;
+}
+.controls button {
+    margin-right: 5px;
+    margin-bottom: 10px; /* Spacing between buttons */
+}
+/* Simple SVG line styling */
+svg.connections-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 5; /* Above canvas but below modal elements */
+}
+svg.connections-svg line {
+    stroke: #6c757d;
+    stroke-width: 2;
+    marker-end: url(#arrowhead); /* Optional arrow */
+}
+/* Output display styles */
+.workflow-output-display {
+    position: absolute;
+    background-color: rgba(40, 44, 52, 0.9); /* Slightly transparent dark */
+    border: 1px solid #6c757d;
+    color: #adb5bd;
+    padding: 8px;
+    border-radius: 1px;
+    font-size: 0.8rem;
+    font-family: monospace;
+    max-width: 300px;
+    max-height: 200px;
+    overflow: auto;
+    z-index: 10; /* Ensure it's above lines */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    transition: top 0.05s, left 0.05s; /* Smooth movement while dragging */
+    pointer-events: none; /* Let clicks pass through to canvas */
+}
+.workflow-output-display table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.workflow-output-display th,
+.workflow-output-display td {
+    border: 1px solid #495057;
+    padding: 4px 6px;
+    text-align: left;
+    vertical-align: top;
+    word-break: break-all; /* Break long values */
+}
+.workflow-output-display th {
+    background-color: #3a3f47;
+    font-weight: bold;
+}
+.workflow-output-display pre { /* For potentially pre-formatted JSON */
+     margin: 0;
+     white-space: pre-wrap;
+}
+.workflow-node {
+    position: absolute;
+    /* other existing styles... */
+    cursor: move;
+    user-select: none; /* Prevent text selection during drag */
+    transition: box-shadow 0.1s; /* Smooth transition for shadow but NOT for position */
+}
+
+.workflow-node.dragging {
+    z-index: 1000;
+    opacity: 0.8;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+/* Draw connections between blocks */
+.output-connection-line {
+    stroke: #00a0ff;  /* Use a distinct color from workflow connections */
+    stroke-width: 2;
+    stroke-dasharray: 4, 2;  /* Create a dashed line for visual distinction */
+    marker-end: url(#output-arrowhead);
+    opacity: 0.7;
+}
