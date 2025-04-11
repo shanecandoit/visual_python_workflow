@@ -39,27 +39,23 @@ def test_parse_valid_workflow_md():
     # Box 2: add_numbers
     add_box = boxes_by_id['add_numbers']
     assert add_box['id'] == 'add_numbers'
-    assert 'number1' in add_box.get('inputs', [])
-    assert 'number2' in add_box.get('inputs', [])
-    assert len(add_box.get('inputs', [])) == 2
-    assert 'def execute(number1, number2):' in add_box.get('code', '')
+    assert 'input_data' in add_box.get('inputs', []), "add_numbers should now have 'input_data' input"
+    assert len(add_box.get('inputs', [])) == 1, "add_numbers should now have only 1 input"
+    assert 'def execute(input_data):' in add_box.get('code', ''), "Code should reflect the new input name"
     assert 'return {"sum": total}' in add_box.get('code', '')
     assert add_box.get('description') == 'Adds the two numbers received as input.'
 
     # --- Assertions for Connections ---
     assert 'connections' in parsed_data
     assert isinstance(parsed_data['connections'], list)
-    assert len(parsed_data['connections']) == 2, "Should find 2 connections"
+    assert len(parsed_data['connections']) == 1, "Should find 1 connection now"
 
-    # Check connection details (order might vary, so check existence)
-    expected_connections = [
-        {'source': 'generate_numbers', 'target': 'add_numbers', 'target_input': 'number1'},
-        {'source': 'generate_numbers', 'target': 'add_numbers', 'target_input': 'number2'}
-    ]
-    # Simple check: convert to tuple of items for comparison regardless of order
-    parsed_conn_tuples = {tuple(sorted(c.items())) for c in parsed_data['connections']}
-    expected_conn_tuples = {tuple(sorted(c.items())) for c in expected_connections}
-    assert parsed_conn_tuples == expected_conn_tuples
+    # Check connection details
+    expected_connection = {'source': 'generate_numbers', 'target': 'add_numbers', 'target_input': 'input_data'}
+    # Simple check: convert to tuple of items for comparison
+    parsed_conn_tuple = tuple(sorted(parsed_data['connections'][0].items()))
+    expected_conn_tuple = tuple(sorted(expected_connection.items()))
+    assert parsed_conn_tuple == expected_conn_tuple, "Connection details should match the updated workflow"
 
     # --- Assertions for Layout ---
     assert 'layout' in parsed_data
